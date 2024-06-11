@@ -41,6 +41,7 @@ function App() {
                         <Route path="/post/:id" element={authUser ? <PostPage /> : <Navigate to="/auth" />} />
                         <Route path="/game/xo" element={authUser ? <TicTacToe /> : <Navigate to="/auth" />} />
                         <Route path="/game/xo/:id" element={authUser ? <InGame /> : <Navigate to="/auth" />} />
+                        <Route path="*" element={<Navigate to="/" />} />                    
                     </Routes>
                 </PageLayout>
             </ScreenContextProvider>

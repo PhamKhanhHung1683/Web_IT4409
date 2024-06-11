@@ -3,10 +3,12 @@ import { deleteObject, ref } from 'firebase/storage';
 import React, { useState } from 'react';
 import { firestore, storage } from '~/Firebase/Firebase';
 import useDeleteComment from './useDeleteComment';
+import { useToast } from '@chakra-ui/react';
 
 const useDeletePost = () => {
     const [deletePostLoading, setDeleteLoading] = useState(false);
     const { deleteLoading, deleteComment } = useDeleteComment();
+    const toast = useToast();
     const deletePost = async (post) => {
         setDeleteLoading(true);
         const { id, comments, imgurl } = post;
@@ -16,7 +18,6 @@ const useDeletePost = () => {
                 const imageRef = ref(storage, `posts/${id}`);
                 await deleteObject(imageRef);
             }
-
             //delete comment
             const batch = writeBatch(firestore);
             for (let i = 0; i < comments.length; i++) {
@@ -25,6 +26,8 @@ const useDeletePost = () => {
             await batch.commit();
             //delte post
             deleteDoc(doc(firestore, 'posts', id));
+            console.log('deleted');
+            toast({ title: 'Deleted successfully', status: 'success' });
         } catch (error) {
             console.log('error delete psot', error);
         } finally {
@@ -33,5 +36,4 @@ const useDeletePost = () => {
     };
     return { deletePostLoading, deletePost };
 };
-
 export default useDeletePost;
