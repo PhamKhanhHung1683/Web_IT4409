@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+/* 
+// font-family: "Playfair Display", serif;
+// font-family: "Dancing Script", cursive; */
+.wrapper {
+    width: max-content;
+    padding: 5px;
+    font-family: 'Playfair Display', serif;
+}
+.logo {
+    font-size: 50px;
+
+    font-weight: bold;
+}
+.banner {
+    font-family: 'Dancing Script', cursive;
+    font-size: 19px;
+    margin-top: -15px;
+    line-height: 1;
+}
+.sm {
+    /* //wrapper */
+
+    .logo {
+        font-size: 45px;
+    }
+    .banner {
+        font-size: 15px;
+    }
+}
+.dark {
+    /* //wrapper */
+    /*if color mode is dark*/
+    color: white;
+}
+
+@media only screen and (max-width: 765px) {
+    .responsive {
+        transform: translate(-42%, 50%) rotate(-90deg);
+        margin-bottom: 70px;
+        .logo {
+            font-size: 40px;
+        }
+        .banner {
+            font-size: 13px;
+        }
+    }
+}
