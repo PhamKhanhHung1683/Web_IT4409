@@ -18,14 +18,14 @@ function App() {
     const { setUser } = useAuthStore();
     const [user, loading, error] = useAuthState(auth);
     useEffect(() => {
-        let unsub;
+        let unsub=()=>{};
         if (authUser) {
             unsub = onSnapshot(doc(firestore, 'users', authUser.uid), (userSnapShot) => {
                 setUser(userSnapShot.data());
                 localStorage.setItem('user-info', JSON.stringify(userSnapShot.data()));
             });
         }
-        return unsub;
+        return ()=>{unsub()};
     }, []);
     return (
         <Router>
