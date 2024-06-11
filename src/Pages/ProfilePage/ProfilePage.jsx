@@ -12,6 +12,10 @@ import useFetchProfilePost from '~/hooks/useFetchProfilePost';
 import useFollow from '../../hooks/useFollow';
 import { FiMapPin } from 'react-icons/fi';
 import { CgWebsite } from 'react-icons/cg';
+import useFollowingsList from '~/hooks/useFollowingsList'; // Đảm bảo đường dẫn đến hook là đúng
+import useFollowersList from '~/hooks/useFollowersList'; // Đảm bảo đường dẫn đến hook là đúng
+import { useNavigate } from 'react-router-dom';
+
 const ProfilePage = () => {
     //the code to style for responsive
     useEffect(() => {
@@ -31,12 +35,22 @@ const ProfilePage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { nickname } = useParams();
+    const [showFollowings, setShowFollowings] = useState(false);
+    const toggleFollowings = () => setShowFollowings(!showFollowings);
+    const [showFollowers, setShowFollowers] = useState(false);
+    const toggleFollowers = () => setShowFollowers(!showFollowers);
+    const navigate = useNavigate();
 
     const { user } = useAuthStore();
     const isOwnerOfProfile = nickname === user.nickname;
     const { loading, userProfile } = useGetProfileByNickname(nickname);
     const { loadingPost, postlist } = useFetchProfilePost(userProfile);
     const { isUpdating, handlerFollow, isFollowing } = useFollow(userProfile?.uid);
+    const { isLoading: isLoadingFollowings, followingsList } = useFollowingsList(userProfile?.uid);
+    const { isLoadings: isLoadingFollowers, followersList } = useFollowersList(userProfile?.uid);
+    const goToUserProfile = (nickname) => {
+        navigate(`/profile/${nickname}`);
+    };
     return (
         <Box w={'full'} maxW={'600px'} id={'container_profile'}>
             {loading && <ProfileLoading elementWidth={elementWidth} />}
@@ -122,18 +136,47 @@ const ProfilePage = () => {
                                 <Text>{FormatDate(userProfile?.joinedat)}</Text>
                             </Flex>
                             <Flex my={2} justifyContent={'flex-start'} gap={4}>
-                                <Link display={'flex'} direction="row" fontSize={'sm'}>
+                                <Link display={'flex'} direction="row" fontSize={'sm'} onClick={toggleFollowings}>
                                     <Text fontWeight={'500'}>
-                                        {userProfile?.following.length} {}
+                                        {userProfile?.following.length} { }
                                     </Text>
                                     <span>&nbsp;</span> {`${' '} Followings`}
                                 </Link>
-                                <Link display={'flex'} direction="row" fontSize={'sm'}>
+                                {showFollowings && (
+                                    <Box mt="4">
+                                        {/* Hiển thị danh sách followings */}
+                                        {isLoadingFollowings ? (
+                                            <Text>Loading followings...</Text>
+                                        ) : (
+                                            followingsList.map((following, index) => (
+                                                <Box key={index} onClick={() => goToUserProfile(following.nickname)} style={{ cursor: 'pointer' }}>
+                                                    {following.name}
+                                                </Box>
+                                            ))
+                                        )}
+                                    </Box>
+                                )}
+
+                                <Link display={'flex'} direction="row" fontSize={'sm'} onClick={toggleFollowers}>
                                     <Text fontWeight={'500'}>
-                                        {userProfile?.follower.length} {}
+                                        {userProfile?.follower.length} { }
                                     </Text>
                                     <span>&nbsp;</span> {`${' '} Followers`}
                                 </Link>
+                                {showFollowers && (
+                                    <Box mt="4">
+                                        {/* Hiển thị danh sách followers */}
+                                        {isLoadingFollowers ? (
+                                            <Text>Loading followers...</Text>
+                                        ) : (
+                                            followersList.map((follower, index) => (
+                                                <Box key={index} onClick={() => goToUserProfile(follower.nickname)} style={{ cursor: 'pointer' }}>
+                                                    {follower.name}
+                                                </Box>
+                                            ))
+                                        )}
+                                    </Box>
+                                )}
                             </Flex>
                         </Flex>
                     </Flex>
