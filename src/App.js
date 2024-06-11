@@ -26,7 +26,7 @@ function App() {
             });
         }
         return unsub;
-    }, []);
+    }, [authUser]);
     return (
         <Router>
             <ScreenContextProvider>

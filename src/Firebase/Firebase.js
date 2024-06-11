@@ -13,9 +13,8 @@ const firebaseConfig = {
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
-    databaseURL: 'https://flash-a7d42-default-rtdb.asia-southeast1.firebasedatabase.app',
-};
-
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+}
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
